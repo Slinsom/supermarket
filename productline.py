@@ -43,5 +43,3 @@ if product_line:
     st.write(payment_methods)
     st.write(f'Rating untuk product line "{product_line}":')
     st.write(ratings)
-
-//tambahkan untuk melihat rata-rata rating, total penjualan, dan jumlah trasaksi dari product line tersebut, 

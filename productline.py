@@ -7,7 +7,10 @@ df = pd.read_csv('Supermarket Sales Cleaned.csv')
 # Membersihkan nama kolom untuk menghindari masalah dengan spasi yang tidak terlihat
 df.columns = df.columns.str.strip()
 
-
+# Fungsi untuk mendapatkan metode pembayaran berdasarkan product line
+def get_payments_by_product_line(product_line):
+    payments = df[df['Product line'] == product_line]['Payment'].value_counts()
+    return payments
 
 # Fungsi untuk mendapatkan branch berdasarkan product line
 def get_branches_by_product_line(product_line):
@@ -64,11 +67,6 @@ st.title('Aplikasi Analisis Product Line dan Pembelian')
 product_line = st.selectbox('Pilih product line:', df['Product line'].unique())  # Pilihan product line
 
 if product_line:
-    # Mendapatkan metode pembayaran untuk product line yang dipilih
-    payment_methods = get_product_line_details(product_line)
-    st.write(f'Metode pembayaran berdasarkan product line "{product_line}":')
-    st.write(payment_methods)
-
     # Mendapatkan branch berdasarkan product line
     branches = get_branches_by_product_line(product_line)
     st.write(f'Cabang (branch) berdasarkan product line "{product_line}":')
@@ -76,7 +74,7 @@ if product_line:
     
     # Mendapatkan jumlah pembeli berdasarkan kota
     cities = get_cities_by_product_line(product_line)
-    st.write(f'Pembeli berdasarkan kota untuk product line "{product_line}":')
+    st.write(f'Kota pembeli berdasarkan product line "{product_line}":')
     st.write(cities)
 
     # Mendapatkan customer type berdasarkan product line
@@ -86,8 +84,13 @@ if product_line:
 
     # Mendapatkan jumlah pembeli berdasarkan gender
     genders = get_genders_by_product_line(product_line)
-    st.write(f'Pembeli berdasarkan gender untuk product line "{product_line}":')
+    st.write(f'Gender pembeli berdasarkan product line "{product_line}":')
     st.write(genders)
+
+    # Mendapatkan metode pembayaran untuk product line yang dipilih
+    payment_methods = get_product_line_details(product_line)
+    st.write(f'Metode pembayaran berdasarkan product line "{product_line}":')
+    st.write(payment_methods)
     
     # Menampilkan rata-rata unit price
     avg_unit_price = get_average_unit_price(product_line)

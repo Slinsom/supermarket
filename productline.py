@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 
 # Memuat dataset yang sudah dibersihkan
-df = pd.read_csv('supermarket_sales_cleaned.csv')
+df = pd.read_csv('Supermarket Sales Cleaned.csv')
 
 # Fungsi untuk mengklasifikasikan product line berdasarkan nama barang
 def classify_product_line(product_name):

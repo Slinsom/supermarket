@@ -32,6 +32,7 @@ def get_product_line_details(product_line):
 # Antarmuka Streamlit
 st.title('Aplikasi Analisis Product Line dan Pembelian')
 
+# Hanya memilih product line
 product_line = st.selectbox('Pilih product line:', df['Product line'].unique())  # Pilihan product line
 
 if product_line:

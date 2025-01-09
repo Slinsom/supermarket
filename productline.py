@@ -7,6 +7,9 @@ df = pd.read_csv('Supermarket Sales Cleaned.csv')
 # Membersihkan nama kolom untuk menghindari masalah dengan spasi yang tidak terlihat
 df.columns = df.columns.str.strip()
 
+# Tampilkan nama kolom untuk memastikan
+st.write("Nama Kolom Dataset:", df.columns)
+
 # Fungsi untuk menghitung jumlah pembelian berdasarkan product line
 def count_purchases_by_product_line(product_line):
     count = df[df['Product line'] == product_line].shape[0]
@@ -29,6 +32,22 @@ def get_product_line_details(product_line):
     ratings = df[df['Product line'] == product_line]['Rating'].describe()
     return total_purchases, payment_methods, ratings
 
+# Fungsi untuk menghitung rata-rata rating, total penjualan, dan jumlah transaksi
+def get_additional_info(product_line):
+    # Rata-rata rating
+    avg_rating = df[df['Product line'] == product_line]['Rating'].mean()
+    
+    # Total penjualan (asumsi 'Total' adalah kolom untuk total penjualan)
+    if 'Total' in df.columns:
+        total_sales = df[df['Product line'] == product_line]['Total'].sum()
+    else:
+        total_sales = "Kolom 'Total' tidak ditemukan!"
+    
+    # Jumlah transaksi (sama dengan jumlah pembelian)
+    transaction_count = df[df['Product line'] == product_line].shape[0]
+    
+    return avg_rating, total_sales, transaction_count
+
 # Antarmuka Streamlit
 st.title('Aplikasi Analisis Product Line dan Pembelian')
 
@@ -43,3 +62,10 @@ if product_line:
     st.write(payment_methods)
     st.write(f'Rating untuk product line "{product_line}":')
     st.write(ratings)
+    
+    # Mendapatkan informasi tambahan (rata-rata rating, total penjualan, jumlah transaksi)
+    avg_rating, total_sales, transaction_count = get_additional_info(product_line)
+    
+    st.write(f'Rata-rata rating untuk product line "{product_line}": {avg_rating:.2f}')
+    st.write(f'Total penjualan untuk product line "{product_line}": {total_sales}')
+    st.write(f'Jumlah transaksi untuk product line "{product_line}": {transaction_count}')

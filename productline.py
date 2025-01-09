@@ -7,11 +7,6 @@ df = pd.read_csv('Supermarket Sales Cleaned.csv')
 # Membersihkan nama kolom untuk menghindari masalah dengan spasi yang tidak terlihat
 df.columns = df.columns.str.strip()
 
-# Fungsi untuk menghitung jumlah pembelian berdasarkan product line
-def count_purchases_by_product_line(product_line):
-    count = df[df['Product line'] == product_line].shape[0]
-    return count
-
 # Fungsi untuk mendapatkan metode pembayaran berdasarkan product line
 def get_payments_by_product_line(product_line):
     payments = df[df['Product line'] == product_line]['Payment'].value_counts()
@@ -19,9 +14,8 @@ def get_payments_by_product_line(product_line):
 
 # Fungsi untuk mendapatkan detail product line tertentu
 def get_product_line_details(product_line):
-    total_purchases = df[df['Product line'] == product_line].shape[0]
     payment_methods = df[df['Product line'] == product_line]['Payment'].value_counts()
-    return total_purchases, payment_methods
+    return payment_methods
 
 # Fungsi untuk mendapatkan kota berdasarkan product line
 def get_cities_by_product_line(product_line):
@@ -50,9 +44,8 @@ st.title('Aplikasi Analisis Product Line dan Pembelian')
 product_line = st.selectbox('Pilih product line:', df['Product line'].unique())  # Pilihan product line
 
 if product_line:
-    # Mendapatkan total pembelian dan metode pembayaran untuk product line yang dipilih
-    total_purchases, payment_methods = get_product_line_details(product_line)
-    st.write(f'Total pembelian untuk product line "{product_line}": {total_purchases}')
+    # Mendapatkan metode pembayaran untuk product line yang dipilih
+    payment_methods = get_product_line_details(product_line)
     st.write(f'Metode pembayaran untuk product line "{product_line}":')
     st.write(payment_methods)
 

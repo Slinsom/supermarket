@@ -12,11 +12,6 @@ def count_purchases_by_product_line(product_line):
     count = df[df['Product line'] == product_line].shape[0]
     return count
 
-# Fungsi untuk mendapatkan rating berdasarkan product line
-def get_ratings_by_product_line(product_line):
-    ratings = df[df['Product line'] == product_line]['Rating']
-    return ratings
-
 # Fungsi untuk mendapatkan metode pembayaran berdasarkan product line
 def get_payments_by_product_line(product_line):
     payments = df[df['Product line'] == product_line]['Payment'].value_counts()
@@ -26,8 +21,7 @@ def get_payments_by_product_line(product_line):
 def get_product_line_details(product_line):
     total_purchases = df[df['Product line'] == product_line].shape[0]
     payment_methods = df[df['Product line'] == product_line]['Payment'].value_counts()
-    ratings = df[df['Product line'] == product_line]['Rating'].describe()
-    return total_purchases, payment_methods, ratings
+    return total_purchases, payment_methods
 
 # Fungsi untuk mendapatkan kota berdasarkan product line
 def get_cities_by_product_line(product_line):
@@ -44,12 +38,10 @@ def get_purchases_by_gender_and_product_line(product_line, gender):
     purchases = df[(df['Product line'] == product_line) & (df['Gender'] == gender)]
     return purchases.shape[0]
 
-# Fungsi untuk menghitung rata-rata rating dan pembelian
-def get_average_ratings_and_purchases(product_line):
-    ratings = df[df['Product line'] == product_line]['Rating']
+# Fungsi untuk menghitung rata-rata pembelian
+def get_average_purchases(product_line):
     total_purchases = df[df['Product line'] == product_line].shape[0]
-    avg_rating = ratings.mean()
-    return avg_rating, total_purchases
+    return total_purchases
 
 # Antarmuka Streamlit
 st.title('Aplikasi Analisis Product Line dan Pembelian')
@@ -58,13 +50,11 @@ st.title('Aplikasi Analisis Product Line dan Pembelian')
 product_line = st.selectbox('Pilih product line:', df['Product line'].unique())  # Pilihan product line
 
 if product_line:
-    # Mendapatkan total pembelian, metode pembayaran, dan rating untuk product line yang dipilih
-    total_purchases, payment_methods, ratings = get_product_line_details(product_line)
+    # Mendapatkan total pembelian dan metode pembayaran untuk product line yang dipilih
+    total_purchases, payment_methods = get_product_line_details(product_line)
     st.write(f'Total pembelian untuk product line "{product_line}": {total_purchases}')
     st.write(f'Metode pembayaran untuk product line "{product_line}":')
     st.write(payment_methods)
-    st.write(f'Rating untuk product line "{product_line}":')
-    st.write(ratings)
 
     # Mendapatkan jumlah pembeli berdasarkan kota
     cities = get_cities_by_product_line(product_line)
@@ -82,7 +72,6 @@ if product_line:
         purchases_by_gender = get_purchases_by_gender_and_product_line(product_line, gender)
         st.write(f'Jumlah pembelian untuk gender "{gender}" pada product line "{product_line}": {purchases_by_gender}')
 
-    # Menampilkan rata-rata rating dan pembelian
-    avg_rating, avg_purchases = get_average_ratings_and_purchases(product_line)
-    st.write(f'Rata-rata rating untuk product line "{product_line}": {avg_rating:.2f}')
+    # Menampilkan rata-rata pembelian
+    avg_purchases = get_average_purchases(product_line)
     st.write(f'Rata-rata jumlah pembelian untuk product line "{product_line}": {avg_purchases}')

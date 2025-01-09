@@ -1,71 +1,35 @@
 import streamlit as st
 import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
 
-# Memuat dataset yang sudah dibersihkan
-df = pd.read_csv('Supermarket Sales Cleaned.csv')
+# Load dataset
+data = pd.read_csv('Supermarket Sales Cleaned.csv')
 
-# Membersihkan nama kolom untuk menghindari masalah dengan spasi yang tidak terlihat
-df.columns = df.columns.str.strip()
+# Sidebar for user input
+st.sidebar.header('User Input Features')
+price = st.sidebar.number_input('Price')
+quantity = st.sidebar.number_input('Quantity')
+total_sales = st.sidebar.number_input('Total Sales')
 
-# Tampilkan nama kolom untuk memastikan
-st.write("Nama Kolom Dataset:", df.columns)
+# Model training (example with RandomForest)
+X = data[['Price', 'Quantity', 'Total']]
+y = data['Product line']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+model = RandomForestClassifier()
+model.fit(X_train, y_train)
 
-# Fungsi untuk menghitung jumlah pembelian berdasarkan product line
-def count_purchases_by_product_line(product_line):
-    count = df[df['Product line'] == product_line].shape[0]
-    return count
+# Prediction
+new_data = pd.DataFrame({'Price': [price], 'Quantity': [quantity], 'Total': [total_sales]})
+prediction = model.predict(new_data)
+st.write(f'Predicted Product Line: {prediction[0]}')
 
-# Fungsi untuk mendapatkan rating berdasarkan product line
-def get_ratings_by_product_line(product_line):
-    ratings = df[df['Product line'] == product_line]['Rating']
-    return ratings
+# Visualization
+st.header('Sales Distribution by Product Line')
+fig, ax = plt.subplots()
+sns.countplot(x='Product line', data=data, ax=ax)
+st.pyplot(fig)
 
-# Fungsi untuk mendapatkan metode pembayaran berdasarkan product line
-def get_payments_by_product_line(product_line):
-    payments = df[df['Product line'] == product_line]['Payment'].value_counts()
-    return payments
-
-# Fungsi untuk mendapatkan detail product line tertentu
-def get_product_line_details(product_line):
-    total_purchases = df[df['Product line'] == product_line].shape[0]
-    payment_methods = df[df['Product line'] == product_line]['Payment'].value_counts()
-    ratings = df[df['Product line'] == product_line]['Rating'].describe()
-    return total_purchases, payment_methods, ratings
-
-# Fungsi untuk menghitung rata-rata rating, total penjualan, dan jumlah transaksi
-def get_additional_info(product_line):
-    # Rata-rata rating
-    avg_rating = df[df['Product line'] == product_line]['Rating'].mean()
-    
-    # Total penjualan (asumsi 'Total' adalah kolom untuk total penjualan)
-    if 'Total' in df.columns:
-        total_sales = df[df['Product line'] == product_line]['Total'].sum()
-    else:
-        total_sales = "Kolom 'Total' tidak ditemukan!"
-    
-    # Jumlah transaksi (sama dengan jumlah pembelian)
-    transaction_count = df[df['Product line'] == product_line].shape[0]
-    
-    return avg_rating, total_sales, transaction_count
-
-# Antarmuka Streamlit
-st.title('Aplikasi Analisis Product Line dan Pembelian')
-
-# Hanya memilih product line
-product_line = st.selectbox('Pilih product line:', df['Product line'].unique())  # Pilihan product line
-
-if product_line:
-    # Mendapatkan total pembelian, metode pembayaran, dan rating untuk product line yang dipilih
-    total_purchases, payment_methods, ratings = get_product_line_details(product_line)
-    st.write(f'Total pembelian untuk product line "{product_line}": {total_purchases}')
-    st.write(f'Metode pembayaran untuk product line "{product_line}":')
-    st.write(payment_methods)
-    st.write(f'Rating untuk product line "{product_line}":')
-    st.write(ratings)
-    
-    # Mendapatkan informasi tambahan (rata-rata rating, total penjualan, jumlah transaksi)
-    avg_rating, total_sales, transaction_count = get_additional_info(product_line)
-    
-    st.write(f'Rata-rata rating untuk product line "{product_line}": {avg_rating:.2f}')
-    st.write(f'Total penjualan untuk product line "{product_line}": {total_sales}')
-    st.write(f'Jumlah transaksi untuk product line "{product_line}": {transaction_count}')
+# More features can be added similarly

@@ -38,6 +38,18 @@ def get_average_rating(product_line):
     avg_rating = ratings.mean()
     return avg_rating
 
+# Fungsi untuk menghitung rata-rata unit price
+def get_average_unit_price(product_line):
+    unit_price = df[df['Product line'] == product_line]['Unit price']
+    avg_unit_price = unit_price.mean()
+    return avg_unit_price
+
+# Fungsi untuk menghitung rata-rata quantity
+def get_average_quantity(product_line):
+    quantity = df[df['Product line'] == product_line]['Quantity']
+    avg_quantity = quantity.mean()
+    return avg_quantity
+
 # Antarmuka Streamlit
 st.title('Aplikasi Analisis Product Line dan Pembelian')
 
@@ -67,3 +79,11 @@ if product_line:
     # Menampilkan rata-rata rating
     avg_rating = get_average_rating(product_line)
     st.write(f'Rata-rata rating untuk product line "{product_line}": {avg_rating:.2f}')
+
+    # Menampilkan rata-rata unit price
+    avg_unit_price = get_average_unit_price(product_line)
+    st.write(f'Rata-rata unit price untuk product line "{product_line}": ${avg_unit_price:.2f}')
+
+    # Menampilkan rata-rata quantity
+    avg_quantity = get_average_quantity(product_line)
+    st.write(f'Rata-rata quantity untuk product line "{product_line}": {avg_quantity:.2f}')

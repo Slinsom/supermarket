@@ -29,6 +29,23 @@ def get_product_line_details(product_line):
     ratings = df[df['Product line'] == product_line]['Rating'].describe()
     return total_purchases, payment_methods, ratings
 
+# Fungsi untuk mendapatkan kota dan gender berdasarkan product line
+def get_city_and_gender_by_product_line(product_line):
+    city_gender = df[df['Product line'] == product_line][['City', 'Gender']].value_counts()
+    return city_gender
+
+# Fungsi untuk mendapatkan pembelian untuk jenis kelamin tertentu
+def get_purchases_by_gender_and_product_line(product_line, gender):
+    purchases = df[(df['Product line'] == product_line) & (df['Gender'] == gender)]
+    return purchases.shape[0]
+
+# Fungsi untuk menghitung rata-rata rating dan pembelian
+def get_average_ratings_and_purchases(product_line):
+    ratings = df[df['Product line'] == product_line]['Rating']
+    total_purchases = df[df['Product line'] == product_line].shape[0]
+    avg_rating = ratings.mean()
+    return avg_rating, total_purchases
+
 # Antarmuka Streamlit
 st.title('Aplikasi Analisis Product Line dan Pembelian')
 
@@ -43,3 +60,19 @@ if product_line:
     st.write(payment_methods)
     st.write(f'Rating untuk product line "{product_line}":')
     st.write(ratings)
+
+    # Mendapatkan kota dan gender berdasarkan product line
+    city_gender = get_city_and_gender_by_product_line(product_line)
+    st.write(f'Pembeli berdasarkan kota dan gender untuk product line "{product_line}":')
+    st.write(city_gender)
+
+    # Menampilkan jumlah pembelian berdasarkan gender
+    gender = st.selectbox('Pilih gender untuk analisis:', df['Gender'].unique())  # Pilihan gender
+    if gender:
+        purchases_by_gender = get_purchases_by_gender_and_product_line(product_line, gender)
+        st.write(f'Jumlah pembelian untuk gender "{gender}" pada product line "{product_line}": {purchases_by_gender}')
+
+    # Menampilkan rata-rata rating dan pembelian
+    avg_rating, avg_purchases = get_average_ratings_and_purchases(product_line)
+    st.write(f'Rata-rata rating untuk product line "{product_line}": {avg_rating:.2f}')
+    st.write(f'Rata-rata jumlah pembelian untuk product line "{product_line}": {avg_purchases}')

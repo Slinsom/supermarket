@@ -5,7 +5,7 @@ from sklearn.ensemble import RandomForestClassifier
 import joblib
 
 # Load dataset
-data = pd.read_csv('supermarket_Analysis_cleaned.csv')
+data = pd.read_csv('Supermarket Sales Cleaned.csv')
 
 # Preprocessing
 data = pd.get_dummies(data, columns=['Gender', 'Payment'])

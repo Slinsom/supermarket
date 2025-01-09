@@ -9,7 +9,8 @@ from sklearn.ensemble import RandomForestClassifier
 data = pd.read_csv('Supermarket Sales Cleaned.csv')
 
 # Mengisi nilai NaN untuk kolom numerik dengan rata-rata
-data.select_dtypes(include=['number']).fillna(data.mean(), inplace=True)
+numerical_cols = data.select_dtypes(include=['float64', 'int64']).columns
+data[numerical_cols] = data[numerical_cols].fillna(data[numerical_cols].mean())
 
 # Sidebar untuk input pengguna
 st.sidebar.header('User Input Features')

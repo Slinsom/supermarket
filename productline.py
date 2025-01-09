@@ -6,7 +6,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 
 # Load dataset
-data = pd.read_csv('supermarket_sales_cleaned.csv')
+data = pd.read_csv('Supermarket Sales Cleaned.csv')
 
 # Sidebar for user input
 st.sidebar.header('User Input Features')

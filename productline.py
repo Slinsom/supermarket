@@ -17,7 +17,10 @@ def get_branches_by_product_line(product_line):
     branches = df[df['Product line'] == product_line]['Branch'].value_counts()
     return branches
     
-
+# Fungsi untuk mendapatkan detail product line tertentu
+def get_product_line_details(product_line):
+    payment_methods = df[df['Product line'] == product_line]['Payment'].value_counts()
+    return payment_methods
 
 # Fungsi untuk mendapatkan customer type berdasarkan product line
 def get_customer_type_by_product_line(product_line):

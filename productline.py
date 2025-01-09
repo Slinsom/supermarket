@@ -69,12 +69,12 @@ product_line = st.selectbox('Pilih product line:', df['Product line'].unique()) 
 if product_line:
     # Mendapatkan metode pembayaran untuk product line yang dipilih
     payment_methods = get_product_line_details(product_line)
-    st.write(f'Metode pembayaran untuk product line "{product_line}":')
+    st.write(f'Metode pembayaran berdasarkan product line "{product_line}":')
     st.write(payment_methods)
 
     # Mendapatkan branch berdasarkan product line
     branches = get_branches_by_product_line(product_line)
-    st.write(f'Cabang (branch) untuk product line "{product_line}":')
+    st.write(f'Cabang (branch) berdasarkan product line "{product_line}":')
     st.write(branches)
     
     # Mendapatkan jumlah pembeli berdasarkan kota
@@ -84,7 +84,7 @@ if product_line:
 
     # Mendapatkan customer type berdasarkan product line
     customer_types = get_customer_type_by_product_line(product_line)
-    st.write(f'Tipe customer untuk product line "{product_line}":')
+    st.write(f'Tipe customer berdasarkan product line "{product_line}":')
     st.write(customer_types)
 
     # Mendapatkan jumlah pembeli berdasarkan gender

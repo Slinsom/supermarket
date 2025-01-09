@@ -29,19 +29,6 @@ def get_product_line_details(product_line):
     ratings = df[df['Product line'] == product_line]['Rating'].describe()
     return total_purchases, payment_methods, ratings
 
-# Fungsi untuk menghitung rata-rata rating, total penjualan, dan jumlah transaksi
-def get_additional_info(product_line):
-    # Rata-rata rating
-    avg_rating = df[df['Product line'] == product_line]['Rating'].mean()
-    
-    # Total penjualan (asumsi 'Total' adalah kolom untuk total penjualan)
-    total_sales = df[df['Product line'] == product_line]['Total'].sum()
-    
-    # Jumlah transaksi (sama dengan jumlah pembelian)
-    transaction_count = df[df['Product line'] == product_line].shape[0]
-    
-    return avg_rating, total_sales, transaction_count
-
 # Antarmuka Streamlit
 st.title('Aplikasi Analisis Product Line dan Pembelian')
 
@@ -56,10 +43,5 @@ if product_line:
     st.write(payment_methods)
     st.write(f'Rating untuk product line "{product_line}":')
     st.write(ratings)
-    
-    # Mendapatkan informasi tambahan (rata-rata rating, total penjualan, jumlah transaksi)
-    avg_rating, total_sales, transaction_count = get_additional_info(product_line)
-    
-    st.write(f'Rata-rata rating untuk product line "{product_line}": {avg_rating:.2f}')
-    st.write(f'Total penjualan untuk product line "{product_line}": {total_sales:.2f}')
-    st.write(f'Jumlah transaksi untuk product line "{product_line}": {transaction_count}')
+
+//tambahkan untuk melihat rata-rata rating, total penjualan, dan jumlah trasaksi dari product line tersebut, 

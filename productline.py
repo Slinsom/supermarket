@@ -7,10 +7,7 @@ df = pd.read_csv('Supermarket Sales Cleaned.csv')
 # Membersihkan nama kolom untuk menghindari masalah dengan spasi yang tidak terlihat
 df.columns = df.columns.str.strip()
 
-# Fungsi untuk mendapatkan metode pembayaran berdasarkan product line
-def get_payments_by_product_line(product_line):
-    payments = df[df['Product line'] == product_line]['Payment'].value_counts()
-    return payments
+
 
 # Fungsi untuk mendapatkan branch berdasarkan product line
 def get_branches_by_product_line(product_line):

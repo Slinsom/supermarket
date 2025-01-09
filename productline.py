@@ -27,11 +27,6 @@ def get_genders_by_product_line(product_line):
     genders = df[df['Product line'] == product_line]['Gender'].value_counts()
     return genders
 
-# Fungsi untuk mendapatkan pembelian untuk jenis kelamin tertentu
-def get_purchases_by_gender_and_product_line(product_line, gender):
-    purchases = df[(df['Product line'] == product_line) & (df['Gender'] == gender)]
-    return purchases.shape[0]
-
 # Fungsi untuk menghitung rata-rata pembelian
 def get_average_purchases(product_line):
     total_purchases = df[df['Product line'] == product_line].shape[0]
@@ -58,12 +53,6 @@ if product_line:
     genders = get_genders_by_product_line(product_line)
     st.write(f'Pembeli berdasarkan gender untuk product line "{product_line}":')
     st.write(genders)
-
-    # Menampilkan jumlah pembelian berdasarkan gender
-    gender = st.selectbox('Pilih gender untuk analisis:', df['Gender'].unique())  # Pilihan gender
-    if gender:
-        purchases_by_gender = get_purchases_by_gender_and_product_line(product_line, gender)
-        st.write(f'Jumlah pembelian untuk gender "{gender}" pada product line "{product_line}": {purchases_by_gender}')
 
     # Menampilkan rata-rata pembelian
     avg_purchases = get_average_purchases(product_line)

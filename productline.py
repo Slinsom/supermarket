@@ -10,36 +10,36 @@ df.columns = df.columns.str.strip()
 # Periksa nama-nama kolom yang ada dalam dataset
 st.write(df.columns)  # Menampilkan nama kolom
 
-# Jika kolom 'Product Line' tidak ada, tampilkan pesan kesalahan
-if 'Product Line' not in df.columns:
-    st.error("Kolom 'Product Line' tidak ditemukan dalam dataset!")
+# Jika kolom 'Product line' tidak ada, tampilkan pesan kesalahan
+if 'Product line' not in df.columns:
+    st.error("Kolom 'Product line' tidak ditemukan dalam dataset!")
 else:
     # Fungsi untuk mengklasifikasikan product line berdasarkan nama produk
     def classify_product_line(product_name):
-        product_line = df[df['Product'].str.contains(product_name, case=False, na=False)]['Product Line'].unique()
+        product_line = df[df['Product'].str.contains(product_name, case=False, na=False)]['Product line'].unique()
         return product_line
 
     # Fungsi untuk menghitung jumlah pembelian berdasarkan product line dan kota
     def count_purchases_by_product_line_and_city(product_line, city):
-        count = df[(df['Product Line'] == product_line) & (df['City'] == city)].shape[0]
+        count = df[(df['Product line'] == product_line) & (df['City'] == city)].shape[0]
         return count
 
     # Fungsi untuk mendapatkan rating berdasarkan product line dan kota
     def get_ratings_by_product_line_and_city(product_line, city):
-        ratings = df[(df['Product Line'] == product_line) & (df['City'] == city)]['Rating']
+        ratings = df[(df['Product line'] == product_line) & (df['City'] == city)]['Rating']
         return ratings
 
     # Fungsi untuk mendapatkan metode pembayaran berdasarkan product line dan kota
     def get_payments_by_product_line_and_city(product_line, city):
-        payments = df[(df['Product Line'] == product_line) & (df['City'] == city)]['Payment'].value_counts()
+        payments = df[(df['Product line'] == product_line) & (df['City'] == city)]['Payment'].value_counts()
         return payments
 
     # Fungsi untuk mendapatkan detail product line tertentu
     def get_product_line_details(product_line):
-        total_purchases = df[df['Product Line'] == product_line].shape[0]
-        payment_methods = df[df['Product Line'] == product_line]['Payment'].value_counts()
-        cities = df[df['Product Line'] == product_line]['City'].value_counts()
-        ratings = df[df['Product Line'] == product_line]['Rating'].describe()
+        total_purchases = df[df['Product line'] == product_line].shape[0]
+        payment_methods = df[df['Product line'] == product_line]['Payment'].value_counts()
+        cities = df[df['Product line'] == product_line]['City'].value_counts()
+        ratings = df[df['Product line'] == product_line]['Rating'].describe()
         return total_purchases, payment_methods, cities, ratings
 
     # Antarmuka Streamlit
@@ -47,7 +47,7 @@ else:
 
     product_name = st.text_input('Masukkan nama produk:')
     city = st.selectbox('Pilih kota:', df['City'].unique())
-    product_line = st.selectbox('Pilih product line:', df['Product Line'].unique())
+    product_line = st.selectbox('Pilih product line:', df['Product line'].unique())
 
     if product_name:
         classified_product_line = classify_product_line(product_name)

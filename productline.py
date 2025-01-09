@@ -1,45 +1,35 @@
 import streamlit as st
 import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
 
-# Memuat dataset yang sudah dibersihkan
-df = pd.read_csv('Supermarket Sales Cleaned.csv')
+# Load dataset
+data = pd.read_csv('supermarket_sales_cleaned.csv')
 
-# Membersihkan nama kolom untuk menghindari masalah dengan spasi yang tidak terlihat
-df.columns = df.columns.str.strip()
+# Sidebar for user input
+st.sidebar.header('User Input Features')
+price = st.sidebar.number_input('Price')
+quantity = st.sidebar.number_input('Quantity')
+total_sales = st.sidebar.number_input('Total Sales')
 
-# Fungsi untuk menghitung jumlah pembelian berdasarkan product line
-def count_purchases_by_product_line(product_line):
-    count = df[df['Product line'] == product_line].shape[0]
-    return count
+# Model training (example with RandomForest)
+X = data[['Price', 'Quantity', 'Total']]
+y = data['Product line']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+model = RandomForestClassifier()
+model.fit(X_train, y_train)
 
-# Fungsi untuk mendapatkan rating berdasarkan product line
-def get_ratings_by_product_line(product_line):
-    ratings = df[df['Product line'] == product_line]['Rating']
-    return ratings
+# Prediction
+new_data = pd.DataFrame({'Price': [price], 'Quantity': [quantity], 'Total': [total_sales]})
+prediction = model.predict(new_data)
+st.write(f'Predicted Product Line: {prediction[0]}')
 
-# Fungsi untuk mendapatkan metode pembayaran berdasarkan product line
-def get_payments_by_product_line(product_line):
-    payments = df[df['Product line'] == product_line]['Payment'].value_counts()
-    return payments
+# Visualization
+st.header('Sales Distribution by Product Line')
+fig, ax = plt.subplots()
+sns.countplot(x='Product line', data=data, ax=ax)
+st.pyplot(fig)
 
-# Fungsi untuk mendapatkan detail product line tertentu
-def get_product_line_details(product_line):
-    total_purchases = df[df['Product line'] == product_line].shape[0]
-    payment_methods = df[df['Product line'] == product_line]['Payment'].value_counts()
-    ratings = df[df['Product line'] == product_line]['Rating'].describe()
-    return total_purchases, payment_methods, ratings
-
-# Antarmuka Streamlit
-st.title('Aplikasi Analisis Product Line dan Pembelian')
-
-# Hanya memilih product line
-product_line = st.selectbox('Pilih product line:', df['Product line'].unique())  # Pilihan product line
-
-if product_line:
-    # Mendapatkan total pembelian, metode pembayaran, dan rating untuk product line yang dipilih
-    total_purchases, payment_methods, ratings = get_product_line_details(product_line)
-    st.write(f'Total pembelian untuk product line "{product_line}": {total_purchases}')
-    st.write(f'Metode pembayaran untuk product line "{product_line}":')
-    st.write(payment_methods)
-    st.write(f'Rating untuk product line "{product_line}":')
-    st.write(ratings)
+# More features can be added similarly

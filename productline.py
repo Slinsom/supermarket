@@ -29,10 +29,15 @@ def get_product_line_details(product_line):
     ratings = df[df['Product line'] == product_line]['Rating'].describe()
     return total_purchases, payment_methods, ratings
 
-# Fungsi untuk mendapatkan kota dan gender berdasarkan product line
-def get_city_and_gender_by_product_line(product_line):
-    city_gender = df[df['Product line'] == product_line][['City', 'Gender']].value_counts()
-    return city_gender
+# Fungsi untuk mendapatkan kota berdasarkan product line
+def get_cities_by_product_line(product_line):
+    cities = df[df['Product line'] == product_line]['City'].value_counts()
+    return cities
+
+# Fungsi untuk mendapatkan gender berdasarkan product line
+def get_genders_by_product_line(product_line):
+    genders = df[df['Product line'] == product_line]['Gender'].value_counts()
+    return genders
 
 # Fungsi untuk mendapatkan pembelian untuk jenis kelamin tertentu
 def get_purchases_by_gender_and_product_line(product_line, gender):
@@ -61,10 +66,15 @@ if product_line:
     st.write(f'Rating untuk product line "{product_line}":')
     st.write(ratings)
 
-    # Mendapatkan kota dan gender berdasarkan product line
-    city_gender = get_city_and_gender_by_product_line(product_line)
-    st.write(f'Pembeli berdasarkan kota dan gender untuk product line "{product_line}":')
-    st.write(city_gender)
+    # Mendapatkan jumlah pembeli berdasarkan kota
+    cities = get_cities_by_product_line(product_line)
+    st.write(f'Pembeli berdasarkan kota untuk product line "{product_line}":')
+    st.write(cities)
+
+    # Mendapatkan jumlah pembeli berdasarkan gender
+    genders = get_genders_by_product_line(product_line)
+    st.write(f'Pembeli berdasarkan gender untuk product line "{product_line}":')
+    st.write(genders)
 
     # Menampilkan jumlah pembelian berdasarkan gender
     gender = st.selectbox('Pilih gender untuk analisis:', df['Gender'].unique())  # Pilihan gender

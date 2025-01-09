@@ -32,6 +32,12 @@ def get_average_purchases(product_line):
     total_purchases = df[df['Product line'] == product_line].shape[0]
     return total_purchases
 
+# Fungsi untuk menghitung rata-rata rating
+def get_average_rating(product_line):
+    ratings = df[df['Product line'] == product_line]['Rating']
+    avg_rating = ratings.mean()
+    return avg_rating
+
 # Antarmuka Streamlit
 st.title('Aplikasi Analisis Product Line dan Pembelian')
 
@@ -57,3 +63,7 @@ if product_line:
     # Menampilkan rata-rata pembelian
     avg_purchases = get_average_purchases(product_line)
     st.write(f'Rata-rata jumlah pembelian untuk product line "{product_line}": {avg_purchases}')
+
+    # Menampilkan rata-rata rating
+    avg_rating = get_average_rating(product_line)
+    st.write(f'Rata-rata rating untuk product line "{product_line}": {avg_rating:.2f}')
